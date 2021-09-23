@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1004598435215",
+    "project_id": "busstop-81137",
+    "storage_bucket": "busstop-81137.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004598435215:android:374461463b5103ae193ffa",
+        "android_client_info": {
+          "package_name": "com.example.busstop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004598435215-ebnknf1fvobolvcc28m1tj1kkq5tv1ct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOXAPvfmdufzpPyJmOz3N_odr_vRrAu5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004598435215-ebnknf1fvobolvcc28m1tj1kkq5tv1ct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

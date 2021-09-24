@@ -3,6 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/drawable/primary_btn_bg.xml" value="0.21979166666666666" />
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/drawable/reg_bg_form.xml" value="0.21979166666666666" />
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/drawable/reg_input_bg.xml" value="0.21979166666666666" />
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/drawable/text_input_bg.xml" value="0.21979166666666666" />
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/font/open_sans_bold.xml" value="0.11354166666666667" />
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/layout/activity_login.xml" value="0.20364583333333333" />
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/layout/activity_main.xml" value="0.20364583333333333" />
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/layout/activity_otpactivity.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/layout/activity_register.xml" value="0.20364583333333333" />
         <entry key="..\:/Users/joekw/AndroidStudioProjects/BusStop/app/src/main/res/layout/activity_splash.xml" value="0.20364583333333333" />
       </map>
     </option>

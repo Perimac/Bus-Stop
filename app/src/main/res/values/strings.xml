@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BusStop</string>
+    <string name="underline_text">This is an &lt;u&gt;underline&lt;/u&gt;.</string>
 </resources>

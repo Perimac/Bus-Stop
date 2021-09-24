@@ -9,8 +9,12 @@
 <!--    <color name="white">#FFFFFFFF</color>-->
 
     <color name="vip1">#ff1600</color>
+    <color name="bg">#E8301E</color>
     <color name="vip4">#B0FF1600</color>
     <color name="vip2">#535b61</color>
     <color name="vip3">#FFffa3c4</color>
+    <color name="lightGray">#F2F2F2</color>
+    <color name="whitecolor">#FFFFFF</color>
+    <color name="disabledBtnBg">#999999</color>
 
 </resources>

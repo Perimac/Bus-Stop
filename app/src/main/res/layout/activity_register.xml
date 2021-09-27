@@ -67,7 +67,7 @@
                 android:layout_gravity="center">
 
                 <EditText
-                    android:id="@+id/driver_name_text"
+                    android:id="@+id/reg_driver_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/reg_input_bg"
@@ -78,7 +78,7 @@
                     tools:ignore="Autofill" />
 
                 <EditText
-                    android:id="@+id/car_number_text"
+                    android:id="@+id/reg_car_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/reg_input_bg"
@@ -90,14 +90,14 @@
                     tools:ignore="Autofill" />
 
                 <EditText
-                    android:id="@+id/car_type_text"
+                    android:id="@+id/reg_car_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/reg_input_bg"
                     android:ems="10"
                     android:hint="car type"
                     android:layout_marginTop="20dp"
-                    android:inputType="phone"
+                    android:inputType="text"
                     android:padding="16dp"
                     android:textSize="16sp"
                     tools:ignore="Autofill" />

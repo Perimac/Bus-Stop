@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootcard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Trip"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:textAllCaps="true"
+            android:textColor="@color/vip3"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:textSize="16sp"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+
+            <Spinner
+                android:id="@+id/spinner_journey"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:entries="@array/journey"
+                android:padding="10dp"
+                android:background="@drawable/text_input_bg"
+                />
+
+            <Spinner
+                android:id="@+id/spinner_bus_stops"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:entries="@array/busstops"
+                android:padding="10dp"
+                android:background="@drawable/text_input_bg"
+                android:layout_marginTop="15dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lat_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="latitude"
+                    android:background="@drawable/text_input_bg"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@android:color/holo_green_light"
+                    android:padding="15dp"/>
+
+                <TextView
+                    android:id="@+id/long_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="longitude"
+                    android:background="@drawable/text_input_bg"
+                    android:textColor="@color/vip3"
+                    android:padding="15dp"/>
+            </LinearLayout>
+
+
+            <Spinner
+                android:id="@+id/spinner_seat_number"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:entries="@array/seat_number"
+                android:padding="10dp"
+                android:background="@drawable/text_input_bg"
+                android:layout_marginTop="15dp"
+                />
+
+
+            <Button
+                android:id="@+id/upload_trip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/primary_btn_bg"
+                android:fontFamily="@font/open_sans_semibold"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:text="Upload"
+                android:textAllCaps="false"
+                android:textColor="@android:color/background_light"
+                android:textSize="16sp"/>
+
+            <ProgressBar
+                android:id="@+id/progressbar_id"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:indeterminateBehavior="cycle"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <!-- Spinner Element -->
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+

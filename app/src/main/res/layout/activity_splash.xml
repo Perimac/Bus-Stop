@@ -12,12 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="BUS STOP"
+        android:text="BUS Stop ALert"
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@android:color/white"
         />
-
-
 
 </RelativeLayout>

@@ -2,140 +2,171 @@ package com.example.busstop;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
-
-import java.util.concurrent.TimeUnit;
+import com.example.busstop.model.BusStops;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class OTPActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser mCurrentUser;
-    private Intent getIntent;
+    private EditText journeyeEditext;
+    private EditText bustopEditext;
+    private TextView longitudeText;
+    private TextView latitudeText;
+    private Button uploadBtn;
+    private ImageButton refreshLocation;
 
-    private String numberFromLogin;
-    private String mVerificationId;
-    private EditText smsEditext;
-    private Button verifyOTPBtn;
+    private static final int UPDATE_INTERVAL = 500;
+    private static final String TAG = OTPActivity.class.getSimpleName();
+
+    private FusedLocationProviderClient fusedProviderClient;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
+    private Location currentLocation;
     private ProgressBar progressBar;
-    private TextView status;
 
+    private DatabaseReference database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otpactivity);
 
-        mAuth = FirebaseAuth.getInstance().getFirebaseAuthSettings().forceRecaptchaFlowForTesting();
+        journeyeEditext = findViewById(R.id.journey_editext);
+        bustopEditext = findViewById(R.id.bustop_text);
+        longitudeText = findViewById(R.id.longitude_text);
+        latitudeText = findViewById(R.id.latitude_text);
+        uploadBtn = findViewById(R.id.uploadBtn);
+        progressBar = findViewById(R.id.bsprogress_bar);
+        refreshLocation = findViewById(R.id.refreshloc);
 
-        mCurrentUser = mAuth.getCurrentUser();
+        fusedProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(UPDATE_INTERVAL);
 
-        smsEditext = findViewById(R.id.otp_text_view);
-        verifyOTPBtn = findViewById(R.id.verify_btn);
-        progressBar = findViewById(R.id.otp_progress_bar);
-        status = findViewById(R.id.otp_form_feedback);
+        database = FirebaseDatabase.getInstance().getReference("Bus-Stops");
 
-        getIntent = getIntent();
-        numberFromLogin = getIntent.getStringExtra("phone");
-        sendVerificationCode(numberFromLogin);
-
-        verifyOTPBtn.setOnClickListener(v -> {
-            String code = smsEditext.getText().toString().trim();
-            if (code.isEmpty() || code.length() < 6) {
-                smsEditext.setError("Enter valid code");
-                smsEditext.requestFocus();
-                return;
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                Log.d("TAG", "Location Result is not Available");
             }
-            verifyVerificationCode(code);
+            @Override
+            public void onLocationAvailability(@NonNull LocationAvailability locationAvailability) {
+                super.onLocationAvailability(locationAvailability);
+                if (locationAvailability.isLocationAvailable()) {
+                    Log.d("TAG", "Location is Available");
+                } else {
+                    Log.d("TAG", "Location is not Available");
+                }
+            }
+        };
+
+        startLocationRequest();
+
+        uploadBtn.setOnClickListener(v ->{
+            uploadBusStops();
         });
 
+        refreshLocation.setOnClickListener(v -> {
+           startLocationRequest();
+        });
 
     }
 
-    private void sendVerificationCode(String number) {
-//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-//                "+233" + number,
-//                60,
-//                TimeUnit.SECONDS,
-//                TaskExecutors.MAIN_THREAD,
-//                mCallbacks);
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber(number)
-                        .setTimeout(60L, TimeUnit.SECONDS)
-                        .setActivity(this)
-                        .setCallbacks(mCallbacks)
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
+    void startLocationRequest() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedProviderClient.requestLocationUpdates(locationRequest, locationCallback, OTPActivity.this.getMainLooper());
+            fusedProviderClient.getLastLocation().addOnSuccessListener(location -> {
+                currentLocation = location;
+                if (currentLocation != null) {
+                latitudeText.setText(String.valueOf(currentLocation.getLatitude()));
+                longitudeText.setText(String.valueOf(currentLocation.getLongitude()));
+                Log.d("Latitude: ", String.valueOf(location.getLatitude()));
+                Log.d("Longitude: ", String.valueOf(location.getLongitude()));
+                }
+            });
+            fusedProviderClient.getLastLocation().addOnFailureListener(location -> {
+                Log.d("TAG", "Exception while getting location: \n" + location.getMessage());
+            });
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(OTPActivity.this, "Permission Needed", Toast.LENGTH_SHORT).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 11);
+            }
+        }
     }
 
-    //the callback to detect the verification status
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks =
-            new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                @Override
-                public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                    String code = phoneAuthCredential.getSmsCode();
-                    if (code != null) {
-                        smsEditext.setText(code);
-                        verifyVerificationCode(code);
-                    }
-                }
-                @Override
-                public void onVerificationFailed(FirebaseException e) {
-                    Toast.makeText(OTPActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-                @Override
-                public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                    super.onCodeSent(s, forceResendingToken);
-                    mVerificationId = s;
-                }
-            };
-
-    private void verifyVerificationCode(String code) {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
-        signInWithPhoneAuthCredential(credential);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        startLocationRequest();
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    void stopLocationRequest() {
+        fusedProviderClient.removeLocationUpdates(locationCallback);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopLocationRequest();
+    }
+
+    private void uploadBusStops(){
+        String journey = journeyeEditext.getText().toString();
+        String destinations = bustopEditext.getText().toString();
+        String latitude = latitudeText.getText().toString();
+        String longitude = longitudeText.getText().toString();
+        String bustStopID = database.push().getKey();
+
+        if (journey.isEmpty() || destinations.isEmpty() || latitude.isEmpty() || longitude.isEmpty()){
+            Toast.makeText(OTPActivity.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressBar.setVisibility(View.VISIBLE);
-        status.setText("Verifying...");
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(OTPActivity.this, task -> {
-                    if (task.isSuccessful()) {
-                        progressBar.setVisibility(View.GONE);
-                        Intent intent = new Intent(OTPActivity.this, RegisterActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                        String message = "Somthing is wrong, we will fix it soon...";
-                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                            message = "Invalid code entered...";
-                        }
-                        status.setText(message);
-                    }
-                });
+        BusStops busstop = new BusStops();
+        busstop.setJourney(journey);
+        busstop.setDestination(destinations);
+        busstop.setDest_latitude(latitude);
+        busstop.setDest_longitude(longitude);
+
+        database.child(bustStopID).setValue(busstop);
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(OTPActivity.this, "Bus Stop added successfully", Toast.LENGTH_SHORT).show();
+        clearUI();
     }
 
+    private void clearUI() {
+        bustopEditext.setText("");
+        latitudeText.setText("");
+        longitudeText.setText("");
+    }
 
 }

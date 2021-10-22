@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'io.github.pilgr:paperdb:2.7.1'
     implementation 'com.google.firebase:firebase-database:20.0.1'
-
-
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'com.firebaseui:firebase-ui-database:2.1.1'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }

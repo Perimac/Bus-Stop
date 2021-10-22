@@ -16,5 +16,9 @@
     <color name="lightGray">#F2F2F2</color>
     <color name="whitecolor">#FFFFFF</color>
     <color name="disabledBtnBg">#999999</color>
+    <color name="seatnum">#248ff1</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="rating_color">#FFC107</color>
+
 
 </resources>

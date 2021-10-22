@@ -11,6 +11,7 @@ public class Trip {
     public double destination_lng;
 
     public Trip() {
+
     }
 
     public String getDriver_name() {

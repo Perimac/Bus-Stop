@@ -28,6 +28,7 @@ public class preference {
         editor.putBoolean(DATA_LOGIN,status);
         editor.apply();
     }
+
     public static boolean getDataLogin(Context context){
         return getSharedPreference(context).getBoolean(DATA_LOGIN,false);
     }
